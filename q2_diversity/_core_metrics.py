@@ -30,6 +30,11 @@ def core_metrics(table: biom.Table, phylogeny: skbio.TreeNode,
                                           skbio.OrdinationResults):
     rarefied_table = rarefy(table=table, sampling_depth=sampling_depth)
 
+    if rarefied_table.shape == (0, 0):
+        raise ValueError('The rarefied table contains no samples or features. '
+                         'Verify your table is valid and that you provided a '
+                         'shallow enough sampling depth.')
+
     faith_pd_vector = alpha_phylogenetic(
         table=rarefied_table, phylogeny=phylogeny, metric='faith_pd')
     observed_otus_vector = alpha(table=rarefied_table, metric='observed_otus')
